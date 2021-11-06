@@ -1,0 +1,32 @@
+{
+  "@@locale": "en",
+
+  "loginTitle": "Sign In With Email",
+  "@main": {
+    "description": ""
+  },
+  "enterYourEmail": "Enter your email",
+  "@enterYourEmail": {
+    "description": ""
+  },
+  "enterYourPassword": "Enter your password",
+  "@enterYourPassword": {
+    "description": ""
+  },
+  "login": "Sign In",
+  "@login": {
+    "description": ""
+  },
+  "doNotHaveAccount": "Don't have an account?",
+  "@doNotHaveAccount": {
+    "description": ""
+  },
+  "register": "Sign Up",
+  "@register": {
+    "description": ""
+  },
+  "profilePicture": "Profile Picture",
+  "@profilePicture": {
+    "description": ""
+  }
+}

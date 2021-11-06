@@ -1,0 +1,32 @@
+{
+  "@@locale": "ar",
+
+  "loginTitle": "قم بتسجيل الدخول",
+  "@main": {
+    "description": ""
+  },
+  "enterYourEmail": "ادخل الايميل الخاص بك",
+  "@enterYourEmail": {
+    "description": ""
+  },
+  "enterYourPassword": "ادخل كلمة المرور الخاصة بك",
+  "@enterYourPassword": {
+    "description": ""
+  },
+  "login": "تسجيل الدخول",
+  "@login": {
+    "description": ""
+  },
+  "doNotHaveAccount": "ليس لديك حساب؟",
+  "@doNotHaveAccount": {
+    "description": ""
+  },
+  "register": "انشاء حساب",
+  "@register": {
+    "description": ""
+  },
+  "profilePicture": "الصورة الشخصية",
+  "@profilePicture": {
+    "description": ""
+  }
+}
