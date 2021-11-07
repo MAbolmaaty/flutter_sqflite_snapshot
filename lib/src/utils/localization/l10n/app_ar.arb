@@ -44,5 +44,13 @@
   "phoneNumber": "رقم الموبايل",
   "@phoneNumber": {
     "description": ""
+  },
+  "passwordsDoNotMatch": "كلمة المرور غير متطابقة",
+  "@passwordsDoNotMatch": {
+    "description": ""
+  },
+  "balance": "الرصيد",
+  "@balance": {
+    "description": ""
   }
 }

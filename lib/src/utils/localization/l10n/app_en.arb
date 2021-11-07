@@ -52,5 +52,13 @@
   "phoneNumber": "Phone Number",
   "@phoneNumber": {
     "description": ""
+  },
+  "passwordsDoNotMatch": "passwords don't match",
+  "@passwordsDoNotMatch": {
+    "description": ""
+  },
+  "balance": "Balance",
+  "@balance": {
+    "description": ""
   }
 }

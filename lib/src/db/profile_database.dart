@@ -93,6 +93,21 @@ class ProfileDatabase {
     );
   }
 
+  Future<User> authenticate(String email) async {
+    final db = await instance.database;
+
+    final maps = await db.query(tableUsers,
+        columns: UserFields.values,
+        where: '${UserFields.email} = ?',
+        whereArgs: [email]);
+
+    if (maps.isNotEmpty) {
+      return User.fromJson(maps.first);
+    } else {
+      throw Exception('Email $email not found');
+    }
+  }
+
   Future close() async {
     final db = await instance.database;
 

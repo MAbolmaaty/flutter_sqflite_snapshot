@@ -28,15 +28,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   // bool rememberMe = true;
   // bool obsecurePassword = true;
-  // var _identifier, _password;
+  String _email, _password;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -46,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (BuildContext context, BoxConstraints viewPortConstraints) {
         return SingleChildScrollView(
           child: Form(
-            //key: formKey,
+            key: formKey,
             child: ConstrainedBox(
               constraints:
                   BoxConstraints(minHeight: viewPortConstraints.maxHeight),
@@ -70,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     ///
                     /// User password
-                    _passwordEntryField(),
+                    _passwordEntryField((value) => _password = value),
 
                     SizedBox(height: 20,),
 
@@ -111,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // validator: (value) => value.isEmpty
           //     ? AppLocalizations.of(context).enterEmailOrPhoneNumber
           //     : null,
-          //onSaved: (value) => _identifier = value,
+          onSaved: (value) => _email = value,
           decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
@@ -135,14 +134,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _passwordEntryField() {
+  Widget _passwordEntryField(Function onSaved,) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
       child: TextFormField(
         maxLines: 1,
         //validator: (value) => value.isEmpty ? validationMessage : null,
-        //onSaved: onSaved,
+        onSaved: onSaved,
         //obscureText: obscureText,
         decoration: InputDecoration(
             contentPadding:
@@ -177,19 +176,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return GestureDetector(
-        onTap: () async {
+        onTap: () {
           ///
           /// Hide keyboard
           FocusScope.of(context).unfocus();
 
-          //await authenticate();
-
-          Navigator.of(context).push(ProfileScreen.route());
-
-          //final form = formKey.currentState;
-          // if (form.validate()) {
-          //   form.save();
-          // }
+          final form = formKey.currentState;
+          if (form.validate()) {
+            form.save();
+            authenticate(_email).then((user) {
+              if (user.password == _password) {
+                Navigator.of(context).push(ProfileScreen.route(user.id));
+              }
+            });
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -245,13 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future authenticate() async {
-    final user = User(
-      username: 'Em',
-      email: 'em@email.com',
-      password: '123456',
-      phoneNumber: '01001010');
-
-    await ProfileDatabase.instance.create(user);
+  Future<User> authenticate(String email) async{
+    return await ProfileDatabase.instance.authenticate(email);
   }
 }

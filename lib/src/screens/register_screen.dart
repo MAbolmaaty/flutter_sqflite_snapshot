@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/src/db/profile_database.dart';
+import 'package:flutter_sqflite/src/models/user.dart';
+import 'package:flutter_sqflite/src/screens/profile_screen.dart';
 import 'package:flutter_sqflite/src/utils/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,19 +20,19 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // final formKey = GlobalKey<FormState>();
-  //
-  // final sKey = GlobalKey<ScaffoldState>();
-  //
-  // String _username, _email, _password, _passwordConfirmation, _phoneNumber;
-  //
+  final formKey = GlobalKey<FormState>();
+
+  final sKey = GlobalKey<ScaffoldState>();
+
+  String _username, _email, _password, _passwordConfirmation, _phoneNumber;
+
   // File imageFile;
   // bool passwordVisible = false, passwordConfirmationVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //key: sKey,
+        key: sKey,
         appBar: AppBar(
           elevation: 0.0,
           automaticallyImplyLeading: false,
@@ -37,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         body: SingleChildScrollView(
           child: Form(
-            //key: formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -66,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _passwordField(
                     AppLocalizations.of(context).password,
                     "",
-                    (){},
+                        (value){_password = value;},
                     false,
                     (){}),
 
@@ -75,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _passwordField(
                     AppLocalizations.of(context).confirmPassword,
                     "",
-                        (){},
+                        (value){_passwordConfirmation = value;},
                     false,
                         (){}),
 
@@ -175,7 +178,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         maxLines: 1,
         // validator: (value) =>
         //     value.isEmpty ? AppLocalizations.of(context).enterUsername : null,
-        // onSaved: (value) => _username = value,
+        onSaved: (value) => _username = value,
         decoration: InputDecoration(
             contentPadding:
                 EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
@@ -207,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         maxLines: 1,
         // validator: (value) =>
         //     value.isEmpty ? AppLocalizations.of(context).enterEmail : null,
-        // onSaved: (value) => _email = value,
+        onSaved: (value) => _email = value,
         decoration: InputDecoration(
             contentPadding:
                 EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
@@ -244,7 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: TextFormField(
         maxLines: 1,
         validator: (value) => value.isEmpty ? validationMessage : null,
-        //onSaved: onSaved,
+        onSaved: onSaved,
         obscureText: obscureText,
         decoration: InputDecoration(
             contentPadding:
@@ -286,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // validator: (value) => value.isEmpty
         //     ? AppLocalizations.of(context).enterPhoneNumber
         //     : null,
-        // onSaved: (value) => _phoneNumber = value,
+        onSaved: (value) => _phoneNumber = value,
         decoration: InputDecoration(
             contentPadding:
                 EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
@@ -323,31 +326,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onTap: () {
           //// Hide keyboard
           FocusScope.of(context).unfocus();
-          //final form = formKey.currentState;
-          // if (form.validate()) {
-          //   form.save();
-          //   if (_password == _passwordConfirmation) {
-          //     authenticationApi
-          //         .register(_username, _email, _password, _passwordConfirmation,
-          //             _phoneNumber, imageFile)
-          //         .then((result) {
-          //       if (result['status']) {
-          //         UserPreferences.saveApiToken(
-          //             authenticationApi.authenticationResponseModel.jwt);
-          //         Navigator.of(context).pushAndRemoveUntil(
-          //             BottomNavScreen.route(
-          //                 currentIndex: 2, realEstateId: widget.realEstateId),
-          //             (route) => false);
-          //       }
-          //     });
-          //   } else {
-          //     sKey.currentState.showSnackBar(SnackBar(
-          //       content: Text(
-          //         AppLocalizations.of(context).passwordsDoNotMatch,
-          //       ),
-          //     ));
-          //   }
-          // }
+          final form = formKey.currentState;
+          if (form.validate()) {
+            form.save();
+            if (_password == _passwordConfirmation) {
+                signup(_username, _email, _password, _phoneNumber).
+                then((user) =>
+                    Navigator.of(context).push(ProfileScreen.route(user.id)));
+            } else {
+              sKey.currentState.showSnackBar(SnackBar(
+                content: Text(
+                  AppLocalizations.of(context).passwordsDoNotMatch,
+                ),
+              ));
+            }
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -379,4 +372,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //     ),
   //   );
   // }
+
+  Future<User> signup(String username, String email, String password,
+      String phoneNumber) async {
+    final user = User(
+        username: username,
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber);
+
+    return await ProfileDatabase.instance.create(user);
+  }
 }
