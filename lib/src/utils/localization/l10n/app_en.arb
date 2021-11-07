@@ -28,5 +28,29 @@
   "profilePicture": "Profile Picture",
   "@profilePicture": {
     "description": ""
+  },
+  "username": "Username",
+  "@username": {
+    "description": ""
+  },
+  "changePicture": "Change Picture",
+  "@changePicture": {
+    "description": ""
+  },
+  "email": "Email",
+  "@email": {
+    "description": ""
+  },
+  "password": "Password",
+  "@password": {
+    "description": ""
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": ""
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": ""
   }
 }

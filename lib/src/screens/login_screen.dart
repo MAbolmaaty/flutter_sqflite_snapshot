@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_sqflite/src/db/profile_database.dart';
+import 'package:flutter_sqflite/src/models/user.dart';
+import 'package:flutter_sqflite/src/screens/profile_screen.dart';
 import 'package:flutter_sqflite/src/screens/register_screen.dart';
 import 'package:flutter_sqflite/src/utils/app_theme.dart';
 // import 'package:provider/provider.dart';
@@ -25,10 +28,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-  bool rememberMe = true;
-  bool obsecurePassword = true;
-  var _identifier, _password;
+  // final formKey = GlobalKey<FormState>();
+  // bool rememberMe = true;
+  // bool obsecurePassword = true;
+  // var _identifier, _password;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (BuildContext context, BoxConstraints viewPortConstraints) {
         return SingleChildScrollView(
           child: Form(
-            key: formKey,
+            //key: formKey,
             child: ConstrainedBox(
               constraints:
                   BoxConstraints(minHeight: viewPortConstraints.maxHeight),
@@ -108,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // validator: (value) => value.isEmpty
           //     ? AppLocalizations.of(context).enterEmailOrPhoneNumber
           //     : null,
-          onSaved: (value) => _identifier = value,
+          //onSaved: (value) => _identifier = value,
           decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
@@ -174,14 +177,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return GestureDetector(
-        onTap: () {
+        onTap: () async {
           ///
           /// Hide keyboard
           FocusScope.of(context).unfocus();
-          final form = formKey.currentState;
-          if (form.validate()) {
-            form.save();
-          }
+
+          //await authenticate();
+
+          Navigator.of(context).push(ProfileScreen.route());
+
+          //final form = formKey.currentState;
+          // if (form.validate()) {
+          //   form.save();
+          // }
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -235,5 +243,15 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future authenticate() async {
+    final user = User(
+      username: 'Em',
+      email: 'em@email.com',
+      password: '123456',
+      phoneNumber: '01001010');
+
+    await ProfileDatabase.instance.create(user);
   }
 }

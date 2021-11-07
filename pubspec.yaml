@@ -37,6 +37,7 @@ dev_dependencies:
   intl: ^0.17.0
   provider: ^6.0.1
   flutter_svg: ^0.22.0
+  sqflite: ^2.0.0+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

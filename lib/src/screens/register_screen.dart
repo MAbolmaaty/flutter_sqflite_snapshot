@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/src/utils/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,19 +17,19 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final formKey = GlobalKey<FormState>();
-
-  final sKey = GlobalKey<ScaffoldState>();
-
-  String _username, _email, _password, _passwordConfirmation, _phoneNumber;
-
-  File imageFile;
-  bool passwordVisible = false, passwordConfirmationVisible = false;
+  // final formKey = GlobalKey<FormState>();
+  //
+  // final sKey = GlobalKey<ScaffoldState>();
+  //
+  // String _username, _email, _password, _passwordConfirmation, _phoneNumber;
+  //
+  // File imageFile;
+  // bool passwordVisible = false, passwordConfirmationVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: sKey,
+        //key: sKey,
         appBar: AppBar(
           elevation: 0.0,
           automaticallyImplyLeading: false,
@@ -36,84 +37,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         body: SingleChildScrollView(
           child: Form(
-            key: formKey,
+            //key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 ///
                 /// User profile picture
-                _userProfilePicture(context),
+                _userProfilePicture(),
+
+                SizedBox(height: 10,),
+
+                ///
+                /// Change Profile Picture
+                _changeProfilePicture(),
+
+                SizedBox(height: 40,),
 
                 ///
                 /// Username
-                //_usernameField(context),
+                _usernameField(),
 
                 ///
                 /// User email address
-                //_emailAddressField(context),
+                _emailAddressField(),
 
                 ///
                 /// User password
-                // AppWidgets.passwordField(
-                //     context,
-                //     AppLocalizations.of(context).password,
-                //     AppLocalizations.of(context).enterPassword,
-                //     (value) => _password = value,
-                //     !passwordVisible,
-                //     () => setState(() {
-                //           passwordVisible = !passwordVisible;
-                //         })),
+                _passwordField(
+                    AppLocalizations.of(context).password,
+                    "",
+                    (){},
+                    false,
+                    (){}),
 
                 ///
                 /// User password confirmation
-                // AppWidgets.passwordField(
-                //     context,
-                //     AppLocalizations.of(context).confirmPassword,
-                //     AppLocalizations.of(context).pleaseConfirmPassword,
-                //     (value) => _passwordConfirmation = value,
-                //     !passwordConfirmationVisible,
-                //     () => setState(() {
-                //           passwordConfirmationVisible =
-                //               !passwordConfirmationVisible;
-                //         })),
+                _passwordField(
+                    AppLocalizations.of(context).confirmPassword,
+                    "",
+                        (){},
+                    false,
+                        (){}),
 
                 ///
                 /// User phone number
-                //_userPhoneNumber(context),
+                _userPhoneNumber(),
 
                 ///
                 /// Register
-                //_registerButton(context),
-
-                ///
-                /// Or Divider
-                //AppWidgets.orDivider(context),
-
-                //////////////////////////////// Login
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Text(
-                //       AppLocalizations.of(context).alreadyHaveAccount,
-                //       style: TextStyle(
-                //           color: Colors.grey,
-                //           fontSize: 12,
-                //           fontWeight: FontWeight.normal),
-                //     ),
-                //     GestureDetector(
-                //       onTap: () {
-                //         Navigator.of(context).pop();
-                //       },
-                //       child: Text(
-                //         AppLocalizations.of(context).login,
-                //         style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.bold),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                _registerButton(),
               ],
             ),
           ),
@@ -165,7 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //       });
   // }
 
-  Widget _userProfilePicture(BuildContext context) {
+  Widget _userProfilePicture() {
     String assetName = 'assets/images/profile_avatar.svg';
     return GestureDetector(
         onTap: () {
@@ -180,169 +152,221 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 100,
               width: 100,
               child: SvgPicture.asset(assetName,
-              semanticsLabel: AppLocalizations.of(context).loginTitle,)),
+              semanticsLabel: AppLocalizations.of(context).profilePicture,)),
         ));
   }
 
-  // Widget _usernameField(BuildContext context) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-  //     child: TextFormField(
-  //       maxLines: 1,
-  //       validator: (value) =>
-  //           value.isEmpty ? AppLocalizations.of(context).enterUsername : null,
-  //       onSaved: (value) => _username = value,
-  //       decoration: InputDecoration(
-  //           contentPadding:
-  //               EdgeInsets.only(top: 11, bottom: 11, left: 16, right: 16),
-  //           labelText: AppLocalizations.of(context).username,
-  //           labelStyle: TextStyle(
-  //             color: const Color(0xFF9e9e9e),
-  //             fontSize: 13,
-  //           ),
-  //           alignLabelWithHint: true,
-  //           border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           enabledBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           focusedBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           isDense: true),
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _emailAddressField(BuildContext context) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-  //     child: TextFormField(
-  //       maxLines: 1,
-  //       validator: (value) =>
-  //           value.isEmpty ? AppLocalizations.of(context).enterEmail : null,
-  //       onSaved: (value) => _email = value,
-  //       decoration: InputDecoration(
-  //           contentPadding:
-  //               EdgeInsets.only(top: 11, bottom: 11, left: 16, right: 16),
-  //           labelText: AppLocalizations.of(context).email,
-  //           labelStyle: TextStyle(
-  //             color: const Color(0xFF9e9e9e),
-  //             fontSize: 13,
-  //           ),
-  //           alignLabelWithHint: true,
-  //           border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           enabledBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           focusedBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           isDense: true),
-  //       keyboardType: TextInputType.emailAddress,
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _userPhoneNumber(BuildContext context) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-  //     child: TextFormField(
-  //       maxLines: 1,
-  //       validator: (value) => value.isEmpty
-  //           ? AppLocalizations.of(context).enterPhoneNumber
-  //           : null,
-  //       onSaved: (value) => _phoneNumber = value,
-  //       decoration: InputDecoration(
-  //           contentPadding:
-  //               EdgeInsets.only(top: 11, bottom: 11, left: 16, right: 16),
-  //           labelText: AppLocalizations.of(context).phoneNumber,
-  //           labelStyle: TextStyle(
-  //             color: const Color(0xFF9e9e9e),
-  //             fontSize: 13,
-  //           ),
-  //           prefixIcon: CountryCodePicker(
-  //             onChanged: (code) {},
-  //             initialSelection: 'SA',
-  //             showCountryOnly: false,
-  //             showOnlyCountryWhenClosed: false,
-  //             showFlag: false,
-  //             showFlagDialog: true,
-  //           ),
-  //           border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           enabledBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           focusedBorder: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(25.0),
-  //               borderSide: BorderSide(color: const Color(0xffE3E3E6))),
-  //           isDense: true),
-  //       keyboardType: TextInputType.phone,
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _registerButton(BuildContext context) {
-  //   var authenticationApi = Provider.of<AuthenticationApi>(context);
-  //   return GestureDetector(
-  //       onTap: () {
-  //         //// Hide keyboard
-  //         FocusScope.of(context).unfocus();
-  //         final form = formKey.currentState;
-  //         if (form.validate()) {
-  //           form.save();
-  //           if (_password == _passwordConfirmation) {
-  //             authenticationApi
-  //                 .register(_username, _email, _password, _passwordConfirmation,
-  //                     _phoneNumber, imageFile)
-  //                 .then((result) {
-  //               if (result['status']) {
-  //                 UserPreferences.saveApiToken(
-  //                     authenticationApi.authenticationResponseModel.jwt);
-  //                 Navigator.of(context).pushAndRemoveUntil(
-  //                     BottomNavScreen.route(
-  //                         currentIndex: 2, realEstateId: widget.realEstateId),
-  //                     (route) => false);
-  //               }
-  //             });
-  //           } else {
-  //             sKey.currentState.showSnackBar(SnackBar(
-  //               content: Text(
-  //                 AppLocalizations.of(context).passwordsDoNotMatch,
-  //               ),
-  //             ));
-  //           }
-  //         }
-  //       },
-  //       child: Container(
-  //         width: MediaQuery.of(context).size.width,
-  //         height: 55,
-  //         margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-  //         alignment: Alignment.center,
-  //         decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.all(Radius.circular(15.0)),
-  //             color: const Color(0xffFFDB27)),
-  //         child: authenticationApi.authenticationStatus ==
-  //                 AuthenticationStatus.Authenticating
-  //             ? _loading()
-  //             : Text(
-  //                 AppLocalizations.of(context).register,
-  //                 style: TextStyle(
-  //                   fontSize: 15,
-  //                   color: Colors.black,
-  //                 ),
-  //               ),
-  //       ));
-  // }
-  //
+  Widget _changeProfilePicture(){
+    return Text(
+      AppLocalizations.of(context).changePicture,
+      style: TextStyle(
+        color: AppTheme.primaryColor,
+        fontSize: 13,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _usernameField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+      child: TextFormField(
+        maxLines: 1,
+        // validator: (value) =>
+        //     value.isEmpty ? AppLocalizations.of(context).enterUsername : null,
+        // onSaved: (value) => _username = value,
+        decoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
+            labelText: AppLocalizations.of(context).username,
+            labelStyle: TextStyle(
+              color: const Color(0xFF9e9e9e),
+              fontSize: 12,
+            ),
+            alignLabelWithHint: true,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            isDense: true),
+      ),
+    );
+  }
+
+  Widget _emailAddressField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+      child: TextFormField(
+        maxLines: 1,
+        // validator: (value) =>
+        //     value.isEmpty ? AppLocalizations.of(context).enterEmail : null,
+        // onSaved: (value) => _email = value,
+        decoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
+            labelText: AppLocalizations.of(context).email,
+            labelStyle: TextStyle(
+              color: const Color(0xFF9e9e9e),
+              fontSize: 12,
+            ),
+            alignLabelWithHint: true,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            isDense: true),
+        keyboardType: TextInputType.emailAddress,
+      ),
+    );
+  }
+
+  Widget _passwordField(
+      String hintText,
+      String validationMessage,
+      Function onSaved,
+      bool obscureText,
+      Function suffixIconOnTap) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+      child: TextFormField(
+        maxLines: 1,
+        validator: (value) => value.isEmpty ? validationMessage : null,
+        //onSaved: onSaved,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+            contentPadding:
+            EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
+            labelText: hintText,
+            labelStyle: TextStyle(
+              color: const Color(0xFF9e9e9e),
+              fontSize: 12,
+            ),
+            suffixIcon: GestureDetector(
+              child: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: const Color(0xffE3E3E6),
+                size: 25,
+              ),
+              onTap: suffixIconOnTap,
+            ),
+            alignLabelWithHint: true,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            isDense: true),
+      ),
+    );
+  }
+
+  Widget _userPhoneNumber() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+      child: TextFormField(
+        maxLines: 1,
+        // validator: (value) => value.isEmpty
+        //     ? AppLocalizations.of(context).enterPhoneNumber
+        //     : null,
+        // onSaved: (value) => _phoneNumber = value,
+        decoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(top: 15, bottom: 15, left: 16, right: 16),
+            labelText: AppLocalizations.of(context).phoneNumber,
+            labelStyle: TextStyle(
+              color: const Color(0xFF9e9e9e),
+              fontSize: 12,
+            ),
+            // prefixIcon: CountryCodePicker(
+            //   onChanged: (code) {},
+            //   initialSelection: 'SA',
+            //   showCountryOnly: false,
+            //   showOnlyCountryWhenClosed: false,
+            //   showFlag: false,
+            //   showFlagDialog: true,
+            // ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: const Color(0xffE3E3E6))),
+            isDense: true),
+        keyboardType: TextInputType.phone,
+      ),
+    );
+  }
+
+  Widget _registerButton() {
+    return GestureDetector(
+        onTap: () {
+          //// Hide keyboard
+          FocusScope.of(context).unfocus();
+          //final form = formKey.currentState;
+          // if (form.validate()) {
+          //   form.save();
+          //   if (_password == _passwordConfirmation) {
+          //     authenticationApi
+          //         .register(_username, _email, _password, _passwordConfirmation,
+          //             _phoneNumber, imageFile)
+          //         .then((result) {
+          //       if (result['status']) {
+          //         UserPreferences.saveApiToken(
+          //             authenticationApi.authenticationResponseModel.jwt);
+          //         Navigator.of(context).pushAndRemoveUntil(
+          //             BottomNavScreen.route(
+          //                 currentIndex: 2, realEstateId: widget.realEstateId),
+          //             (route) => false);
+          //       }
+          //     });
+          //   } else {
+          //     sKey.currentState.showSnackBar(SnackBar(
+          //       content: Text(
+          //         AppLocalizations.of(context).passwordsDoNotMatch,
+          //       ),
+          //     ));
+          //   }
+          // }
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 45,
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              color: AppTheme.primaryColor),
+          child: Text(
+            AppLocalizations.of(context).register.toUpperCase(),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey[400],
+            ),
+          ),
+        ));
+  }
+
   // Widget _loading() {
   //   return Center(
   //     child: SizedBox(
